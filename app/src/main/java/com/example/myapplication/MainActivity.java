@@ -3,8 +3,10 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button alertDialog = findViewById(R.id.show_allert_dialog);
         alertDialog.setOnClickListener(alert -> showAlertDialog());
+
+        Button progressDialog = findViewById(R.id.show_progress_dialog);
+        progressDialog.setOnClickListener(alert -> showProgressDialog());
 
 
     }
@@ -38,6 +43,21 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void showProgressDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Progress Dialog");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        // Simulate a long-running task
+        new Handler().postDelayed(() -> {
+            progressDialog.dismiss();
+            Toast.makeText(MainActivity.this, "Task completed", Toast.LENGTH_SHORT).show();
+        }, 3000);
     }
 
 
