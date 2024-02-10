@@ -4,13 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button timePickerDialog = findViewById(R.id.show_timepicker_dialog);
         timePickerDialog.setOnClickListener(alert -> showTimePickerDialog());
+
+        Button customeDialog = findViewById(R.id.show_custom_dialog);
+        customeDialog.setOnClickListener(alert -> showCustomeDialog());
 
 
     }
@@ -106,6 +112,26 @@ public class MainActivity extends AppCompatActivity {
         // Create a new instance of TimePickerDialog and return it
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, timeSetListener, hour, minute, true);
         timePickerDialog.show();
+    }
+
+    private void showCustomeDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setCancelable(true);
+
+        TextView dialogTitle = dialog.findViewById(R.id.dialog_title);
+        EditText dialogInput = dialog.findViewById(R.id.dialog_input);
+        Button dialogButton = dialog.findViewById(R.id.dialog_button);
+
+        dialogTitle.setText("Custom Dialog");
+        dialogButton.setOnClickListener(v -> {
+            // Handle button click
+            String inputText = dialogInput.getText().toString();
+            Toast.makeText(MainActivity.this, "You entered: " + inputText, Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
 
