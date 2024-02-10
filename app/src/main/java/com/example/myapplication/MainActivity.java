@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button datePickerDialog = findViewById(R.id.show_datepicker_dialog);
         datePickerDialog.setOnClickListener(alert -> showDatePickerDialog());
+
+        Button timePickerDialog = findViewById(R.id.show_timepicker_dialog);
+        timePickerDialog.setOnClickListener(alert -> showTimePickerDialog());
 
 
     }
@@ -84,6 +88,24 @@ public class MainActivity extends AppCompatActivity {
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, dateSetListener, year, month, dayOfMonth);
         datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minute) -> {
+            // Format the time according to your preference
+            String selectedTime = hourOfDay + ":" + minute;
+            Toast.makeText(MainActivity.this, "زمان انتخاب شده:" + selectedTime, Toast.LENGTH_SHORT).show();
+
+        };
+
+        // Get current time
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        // Create a new instance of TimePickerDialog and return it
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, timeSetListener, hour, minute, true);
+        timePickerDialog.show();
     }
 
 

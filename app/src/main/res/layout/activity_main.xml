@@ -33,6 +33,12 @@
             android:layout_height="wrap_content"
             android:text="Show DatePicker Dialog" />
 
+ <Button
+            android:id="@+id/show_timepicker_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show TimePicker Dialog" />
+
 
     </LinearLayout>
 
