@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.os.Handler;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button progressDialog = findViewById(R.id.show_progress_dialog);
         progressDialog.setOnClickListener(alert -> showProgressDialog());
+
+        Button datePickerDialog = findViewById(R.id.show_datepicker_dialog);
+        datePickerDialog.setOnClickListener(alert -> showDatePickerDialog());
 
 
     }
@@ -58,6 +64,26 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.dismiss();
             Toast.makeText(MainActivity.this, "Task completed", Toast.LENGTH_SHORT).show();
         }, 3000);
+    }
+
+    private void showDatePickerDialog() {
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
+            // month is zero-based, so add 1 to get the correct month
+            String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+            Toast.makeText(MainActivity.this, "تاریخ انتخاب شده: " + selectedDate, Toast.LENGTH_SHORT).show();
+
+
+        };
+
+        // Get current date
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create a new instance of DatePickerDialog and return it
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, dateSetListener, year, month, dayOfMonth);
+        datePickerDialog.show();
     }
 
 
