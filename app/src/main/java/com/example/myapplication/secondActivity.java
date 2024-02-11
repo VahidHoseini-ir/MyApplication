@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ public class secondActivity extends Activity {
     private VideoView videoView;
     private Button playButton, pauseButton, stopButton;
 
+    Uri videoUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,15 @@ public class secondActivity extends Activity {
         pauseButton = findViewById(R.id.pauseButton);
         stopButton = findViewById(R.id.stopButton);
 
-        checkStoragePermission();
+
+        Intent in = getIntent();
+        if (in != null && in.getAction() != null && in.getAction().equals(Intent.ACTION_VIEW)) {
+            videoUri = in.getData();
+            if (videoUri != null) {
+                intentPlay(videoUri);
+            }
+        }
+
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,15 +69,9 @@ public class secondActivity extends Activity {
         });
     }
 
-    private void checkStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERMISSION_REQUEST_CODE);
-        } else {
-            loadVideoFile();
-        }
+
+    private void intentPlay(Uri video) {
+        playVideouri();
     }
 
     private void loadVideoFile() {
@@ -75,14 +80,14 @@ public class secondActivity extends Activity {
 
         if (videoFiles != null && videoFiles.length > 0) {
             String selectedVideoPath = videoFiles[0].getAbsolutePath();
-            playVideo(selectedVideoPath);
+//            playVideouri(selectedVideoPath);
         } else {
             Toast.makeText(this, "No video files found", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void playVideo(String selectedVideoPath) {
-        videoView.setVideoURI(Uri.parse(selectedVideoPath));
+    private void playVideouri() {
+        videoView.setVideoURI(videoUri);
         videoView.setMediaController(new MediaController(this));
         videoView.requestFocus();
         videoView.start();
@@ -104,15 +109,4 @@ public class secondActivity extends Activity {
         videoView.stopPlayback();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                loadVideoFile();
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }
